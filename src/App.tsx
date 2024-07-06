@@ -1,12 +1,15 @@
 import './App.css';
 import { todos } from '../config/types';
-import { useTodo } from '../config/store';
+import { useTodo, useTodoAction } from '../config/store';
 import { ReactNode, useState } from 'react';
+import Posts from './Components/Posts';
+import Posts2 from './Components/Posts2';
 
 function App() {
   const [input, setInput] = useState('');
   // https://velog.io/@2ast/React-Zustand-custom-selector%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%B5%9C%EC%A0%81%ED%99%94
-  const { todos, addTodo, deleteTodo, checkTodo } = useTodo();
+  const todos = useTodo();
+  const { addTodo, deleteTodo, checkTodo } = useTodoAction();
 
   const addList: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -28,52 +31,57 @@ function App() {
   };
 
   return (
-    <Div>
-      <form onSubmit={addList}>
-        <div className='m-4 flex gap-3 text-sm'>
-          <input
-            className='grow rounded-md border-[1px] px-2'
-            type='text'
-            name='todo-text'
-            value={input}
-            placeholder='할 일을 입력하세요.'
-            onChange={(e) => setInput(e.target.value)}
-          ></input>
-          <button
-            className='rounded-md bg-blue-500 px-4 py-2 text-white'
-            type='submit'
-            name='todo-submit-button'
-          >
-            추가
-          </button>
-        </div>
-      </form>
-      <ul className='m-4'>
-        {todos.map((todo) => {
-          return (
-            <li
-              key={todo.id}
-              className='mb-3 flex gap-1 border-b-[1px] pb-2'
-              draggable
+    <>
+      <Div>
+        <form onSubmit={addList}>
+          <div className='m-4 flex gap-3 text-sm'>
+            <input
+              className='grow rounded-md border-[1px] px-2'
+              type='text'
+              name='todo-text'
+              value={input}
+              placeholder='할 일을 입력하세요.'
+              onChange={(e) => setInput(e.target.value)}
+            ></input>
+            <button
+              className='rounded-md bg-blue-500 px-4 py-2 text-white'
+              type='submit'
+              name='todo-submit-button'
             >
-              <input
-                type='checkbox'
-                checked={todo.checked}
-                onChange={() => checkList(todo.id)}
-              ></input>
-              <p className='grow'>{todo.text}</p>
-              <button
-                className='h-6 w-6 rounded-[12px] bg-red-500 text-[9px] text-white'
-                type='button'
-                onClick={() => deleteList(todo.id)}
+              추가
+            </button>
+          </div>
+        </form>
+        <ul className='m-4'>
+          {todos.map((todo) => {
+            return (
+              <li
+                key={todo.id}
+                className='mb-3 flex gap-1 border-b-[1px] pb-2'
+                draggable
               >
-                X
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </Div>
+                <input
+                  type='checkbox'
+                  checked={todo.checked}
+                  onChange={() => checkList(todo.id)}
+                ></input>
+                <p className='grow'>{todo.text}</p>
+                <button
+                  className='h-6 w-6 rounded-[12px] bg-red-500 text-[9px] text-white'
+                  type='button'
+                  onClick={() => deleteList(todo.id)}
+                >
+                  X
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </Div>
+      <Posts></Posts>
+      <br></br>
+      <Posts2></Posts2>
+    </>
   );
 }
 

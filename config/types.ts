@@ -3,3 +3,11 @@ export interface todos {
   text: string;
   checked: boolean;
 }
+
+// types.ts
+export interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
