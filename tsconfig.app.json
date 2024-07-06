@@ -23,5 +23,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "config/store.tsx", "config/types.tsx"]
+  "include": ["src", "config/store.tsx", "config/types.ts"]
 }
