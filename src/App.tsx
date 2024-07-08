@@ -1,25 +1,39 @@
 import './App.css';
 import { todos } from '../config/types';
 import { useTodo, useTodoAction } from '../config/store';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import Posts from './Components/Posts';
 import Posts2 from './Components/Posts2';
+import Posts3 from './Components/Posts3';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type FormValues = {
+  todoText: string;
+};
 
 function App() {
-  const [input, setInput] = useState('');
+  //https://tech.osci.kr/introduce-react-hook-form/
+  const { register, handleSubmit, reset } = useForm<FormValues>({
+    // mode는 유효성 검사를 할 타이밍을 정할 수 있음. 아래와같이 하면 change가 있을 때 마다 검사
+    mode: 'onChange',
+    // defaultValues는 초기값이 있을 때 설정, reset시에도 이 값으로 초기화 될 것
+    defaultValues: {
+      todoText: '',
+    },
+  });
+
   // https://velog.io/@2ast/React-Zustand-custom-selector%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%B5%9C%EC%A0%81%ED%99%94
   const todos = useTodo();
   const { addTodo, deleteTodo, checkTodo } = useTodoAction();
 
-  const addList: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
+  const addList: SubmitHandler<FormValues> = (data) => {
     const todo: todos = {
       id: new Date().getTime(),
-      text: input,
+      text: data.todoText,
       checked: false,
     };
     addTodo(todo);
-    setInput('');
+    reset();
   };
 
   const deleteList = (id: number) => {
@@ -33,20 +47,17 @@ function App() {
   return (
     <>
       <Div>
-        <form onSubmit={addList}>
+        <form onSubmit={handleSubmit(addList)}>
           <div className='m-4 flex gap-3 text-sm'>
             <input
               className='grow rounded-md border-[1px] px-2'
               type='text'
-              name='todo-text'
-              value={input}
               placeholder='할 일을 입력하세요.'
-              onChange={(e) => setInput(e.target.value)}
+              {...register('todoText', { required: true })}
             ></input>
             <button
               className='rounded-md bg-blue-500 px-4 py-2 text-white'
               type='submit'
-              name='todo-submit-button'
             >
               추가
             </button>
@@ -78,9 +89,12 @@ function App() {
           })}
         </ul>
       </Div>
+      <br></br>
       <Posts></Posts>
       <br></br>
       <Posts2></Posts2>
+      <br></br>
+      <Posts3></Posts3>
     </>
   );
 }

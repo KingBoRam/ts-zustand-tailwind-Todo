@@ -10,7 +10,7 @@ const Posts = () => {
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['post'],
+    queryKey: ['post', 1],
     queryFn: fetchPost,
   });
 

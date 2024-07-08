@@ -4,13 +4,13 @@ import axios from 'axios';
 const Posts2 = () => {
   const fetchPost = async () => {
     const { data } = await axios.get(
-      'https://jsonplaceholder.typicode.com/posts/1'
+      'https://jsonplaceholder.typicode.com/posts/2'
     );
     return data;
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['post'],
+    queryKey: ['post', 2],
     queryFn: fetchPost,
   });
 
